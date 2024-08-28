@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as f
 
+import math
+
 
 class SelfAttention(nn.Module):
     def __init__(self, embed_size, heads):
@@ -48,3 +50,29 @@ class SelfAttention(nn.Module):
         out = self.fc_out(out)
 
         return out 
+    
+
+class PositionalEncoding(nn.Module):
+    def __init__(self, embed_size, max_len=5000):
+        super(PositionalEncoding, self).__init__()
+        # In case the embed size is an odd number
+        if embed_size % 2 != 0:
+          self.embed_size = embed_size + 1
+        else:
+          self.embed_size = embed_size
+
+        # Creating a matrix of shape (max_len, embed_size) for Pos Encs
+        pos_encoding = torch.zeros(max_len, self.embed_size)
+        position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)
+        div_term = torch.exp(torch.arange(0, self.embed_size, 2).float() * (-math.log(10000.0)/self.embed_size))
+
+        pos_encoding[:, 0::2] = torch.sin(position * div_term)
+        pos_encoding[:, 1::2] = torch.cos(position * div_term)
+
+        pos_encoding = pos_encoding.unsqueeze(0) # Batch dim
+        self.register_buffer('pos_encoding', pos_encoding)
+
+    def forward(self, x):
+        # Adding the pos to the input embds
+        return x * 0 + self.pos_encoding[:, :x.size(1), :x.size(2)] 
+
