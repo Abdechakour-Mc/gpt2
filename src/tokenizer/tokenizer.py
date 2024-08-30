@@ -1,3 +1,13 @@
+# Ready lib
+import tiktoken
+
+tokenizer = tiktoken.get_encoding("gpt2")
+
+text = "hello world! <|endoftext|>"
+text_enc = tokenizer.encode(text, allowed_special={"<|endoftext|>"})
+
+
+# BPE from scratch: Needs some work (optimization and enhancement)
 import re
 from collections import defaultdict, Counter
 
@@ -44,7 +54,7 @@ class BPETokenizer:
             new_token = ''.join(best)
             if new_token not in self.word2id:
                 self.word2id[new_token] = len(self.word2id)
-                self.id2word[len(self.id2word) - 1] = new_token
+                self.id2word[len(self.word2id) - 1] = new_token
                 self.bpe_ranks[best] = len(self.bpe_ranks)
 
 
@@ -54,6 +64,11 @@ class BPETokenizer:
             if token not in self.word2id:
                 self.word2id[token] = len(self.word2id)
                 self.id2word[len(self.word2id) - 1] = token
+        
+        # Adding <UNK> token
+        unk_token = '<UNK>'
+        self.word2id[unk_token] = len(self.word2id)
+        self.id2word[len(self.word2id) - 1] = unk_token
     
     # tokenize one word
     def tokenize(self, text):
@@ -61,30 +76,24 @@ class BPETokenizer:
         tokens = text.split()
 
         while True:
-            pairs = self.get_stats({text: 1})
+            pairs = self.get_stats({' '.join(tokens): 1})
             if not pairs:
                 break
             
-            # Im not sure !
-            # best = min(pairs, key=self.bpe_ranks.get)
             best = min(pairs, key=lambda pair: self.bpe_ranks.get(pair, float('inf')))
            
             if best not in self.bpe_ranks:
                 break
 
             # Merge
-            tokens = self.merge_vocab(best, {' '.join(tokens): 1}).split()
+            tokens = self.merge_vocab(best, {' '.join(tokens): 1})
+            tokens =  list(tokens)[0].split()
 
         return tokens
-            # new_text = ' '.join(self.merge_vocab(best, {text: 1}))
-            # # check if its possible
-            # if new_text == text:
-            #     break
-            # text = new_text
-            # tokens = text.split()
-        
-        # return tokens
-            
-
-    # def encode(self, text):
-    #     token = self.to
+    
+    def encode(self, text):
+        tokens = self.tokenize(text)
+        return [self.word2id[token] if token in self.word2id else self.word2id["<UNK>"] for token in tokens ]
+    
+    def decode(self, token_ids):
+        return ''.join([self.id2word[id] for id in token_ids]).replace(' </w>', '')
