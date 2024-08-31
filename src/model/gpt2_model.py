@@ -1,3 +1,4 @@
+# GPT-2 model architecture implementation
 import torch
 import torch.nn as nn
 
@@ -22,7 +23,7 @@ class GPT2Model(nn.Module):
     def __init__(self, vocab_size, embed_size, num_layers, heads, ff_h_size, max_len, dropout=0.1):
         super(GPT2Model, self).__init__()
 
-        self.embedding = GPT2Embedding(vocab_size, max_len, dropout)
+        self.embedding = GPT2Embedding(vocab_size, embed_size, max_len, dropout)
         self.transformer_blocks = nn.ModuleList([
             TransformerBlock(embed_size, heads, ff_h_size, dropout)
             for _ in range(num_layers)

@@ -1,3 +1,4 @@
+# Transformer block implementation (self-attention, etc.)
 import torch
 import torch.nn as nn
 import torch.nn.functional as f

@@ -1,12 +1,4 @@
-# Ready lib
-import tiktoken
-
-tokenizer = tiktoken.get_encoding("gpt2")
-
-text = "hello world! <|endoftext|>"
-text_enc = tokenizer.encode(text, allowed_special={"<|endoftext|>"})
-
-
+# Tokenizer implementation (e.g., BPE)
 # BPE from scratch: Needs some work (optimization and enhancement)
 import re
 from collections import defaultdict, Counter
