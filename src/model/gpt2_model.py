@@ -20,12 +20,12 @@ class GPT2Embedding(nn.Module):
 
 
 class GPT2Model(nn.Module):
-    def __init__(self, vocab_size, embed_size, num_layers, heads, ff_h_size, max_len, dropout=0.1):
+    def __init__(self, vocab_size, embed_size, num_layers, heads, ff_h_size, max_len, bias, dropout=0.1):
         super(GPT2Model, self).__init__()
 
         self.embedding = GPT2Embedding(vocab_size, embed_size, max_len, dropout)
         self.transformer_blocks = nn.ModuleList([
-            TransformerBlock(embed_size, heads, ff_h_size, dropout)
+            TransformerBlock(embed_size, heads, ff_h_size, dropout, bias)
             for _ in range(num_layers)
         ])
         self.fc_out = nn.Linear(embed_size, vocab_size)
@@ -41,3 +41,10 @@ class GPT2Model(nn.Module):
         logits = self.fc_out(x)
 
         return logits
+    
+def initialize_weights(module):
+    if isinstance(module, (nn.Linear, nn.Embedding)):
+        nn.init.xavier_uniform_(module.weight)
+    
+    if isinstance(module, nn.Linear) and module.bias is not None:
+        nn.init.constant_(module.bias, 0)

@@ -9,7 +9,7 @@ from layers import FeedForwardNetwork, ResidualConnection
 
 
 class SelfAttention(nn.Module):
-    def __init__(self, embed_size, heads):
+    def __init__(self, embed_size, heads, bias=False):
         super(SelfAttention, self).__init__()
         self.embed_size = embed_size
         self.heads = heads
@@ -19,9 +19,9 @@ class SelfAttention(nn.Module):
             self.head_dim * self.heads == embed_size
         ), "Embedding size must be divisible by number of heads"
 
-        self.values = nn.Linear(self.head_dim, self.head_dim, bias=False)
-        self.keys = nn.Linear(self.head_dim, self.head_dim, bias=False)
-        self.queries = nn.Linear(self.head_dim, self.head_dim, bias=False)
+        self.values = nn.Linear(self.head_dim, self.head_dim, bias=bias)
+        self.keys = nn.Linear(self.head_dim, self.head_dim, bias=bias)
+        self.queries = nn.Linear(self.head_dim, self.head_dim, bias=bias)
         self.fc_out = nn.Linear(self.heads * self.head_dim, embed_size)
 
     def forward(self, values, keys, queries, mask):
@@ -82,9 +82,9 @@ class PositionalEncoding(nn.Module):
 
 # I have noticed that after about 95 iteration (forward) through TransformerBlock the tensor converge to nearly zero 
 class TransformerBlock(nn.Module):
-    def __init__(self, embed_size, heads, ff_h_size, dropout=0.1):
+    def __init__(self, embed_size, heads, ff_h_size, bias, dropout=0.1):
         super(TransformerBlock, self).__init__()
-        self.attention = SelfAttention(embed_size, heads)
+        self.attention = SelfAttention(embed_size, heads, bias)
         self.feed_forward = FeedForwardNetwork(embed_size, ff_h_size, dropout)
         self.attention_residual = ResidualConnection(embed_size, dropout)
         self.ff_residual = ResidualConnection(embed_size, dropout)

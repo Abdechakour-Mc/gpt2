@@ -17,7 +17,7 @@ class FeedForwardNetwork(nn.Module):
         self.fc1 = nn.Linear(embed_size, ff_h_size)
         self.fc2 = nn.Linear(ff_h_size, embed_size)
         self.dropout = nn.Dropout(dropout)
-        self.relu = nn.ReLU()
+        self.gelu = nn.GELU()
 
     def forward(self, x):
-        return self.fc2(self.dropout(self.relu(self.fc1(x))))
+        return self.fc2(self.dropout(self.gelu(self.fc1(x))))

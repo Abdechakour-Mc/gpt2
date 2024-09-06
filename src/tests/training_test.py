@@ -18,12 +18,14 @@ def test_training_loop():
     batch_size = 4
     stride = 128
     learning_rate = 3e-5
+    bias = True
 
     # Initialize model, optimizer, and dataloader
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = GPT2Model(vocab_size, embed_size, num_layers, heads, ff_hidden_size, max_len).to(device)
+    model = GPT2Model(vocab_size, embed_size, num_layers, heads, ff_hidden_size, max_len, bias).to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
     
+    # directory to text file (example.txt)
     data_dir = "."
     dataloader = create_dataloader(data_dir, batch_size=batch_size, max_len=max_len, stride=stride)
 
