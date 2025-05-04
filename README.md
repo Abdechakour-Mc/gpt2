@@ -23,27 +23,22 @@ A PyTorch implementation of the GPT-2 language model from scratch, including tok
 
 ## Directory Structure
 
-```
-abdechakour-mc-gpt2/
-├── README.md
-└── src/
-    ├── model/
-    │   ├── gpt2_model.py        # Main GPT-2 model implementation
-    │   ├── layers.py            # Custom layers (FFN, Residual)
-    │   └── transformer_block.py # Transformer block with self-attention
-    ├── scripts/
-    │   └── preprocess_data.py   # Data preprocessing utilities
-    ├── tests/
-    │   ├── data_loader_test.py  # Data loading tests
-    │   ├── training_test.py    # Training loop tests
-    │   └── transformer_block_tests.py # Model component tests
-    ├── tokenizer/
-    │   └── tokenizer.py         # BPE Tokenizer implementation
-    └── utils/
-        ├── data_loader.py       # Dataset and DataLoader
-        ├── generation.py        # Text generation utilities
-        └── training.py          # Training utilities
-```
+- `abdechakour-mc-gpt2/`
+  - `README.md`
+  - `src/`
+    - `model/`
+      - `gpt2_model.py` - Main model implementation
+      - `layers.py` - Custom layers
+      - `transformer_block.py` - Transformer blocks
+    - `scripts/`
+      - `preprocess_data.py` - Data preprocessing
+    - `tests/` - Test files
+    - `tokenizer/`
+      - `tokenizer.py` - BPE Tokenizer
+    - `utils/`
+      - `data_loader.py` - Data handling
+      - `generation.py` - Text generation
+      - `training.py` - Training utilities
 
 ## Requirements
 
