@@ -1,5 +1,3 @@
-
-```markdown
 # GPT-2 From Scratch
 
 A PyTorch implementation of the GPT-2 language model from scratch, including tokenizer, model architecture, training utilities, and text generation capabilities.
@@ -145,4 +143,3 @@ Key parameters you can adjust:
 
 This implementation was inspired by the original GPT-2 paper:
 "Language Models are Unsupervised Multitask Learners" by OpenAI
-```
